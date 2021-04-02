@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flex, Link, Box} from "@chakra-ui/react";
+import {Flex, Link, Box, Button} from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useMeQuery } from '../generated/graphql';
 
@@ -10,6 +10,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({}) => {
     const [{data, fetching}] = useMeQuery();
     let body = null;
+    console.log(body);
     if (fetching) {
 
     } else if (!data?.me) {
@@ -23,9 +24,10 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         </>
     } else {
         body = (
-            <Box>
-                {data.me.username}
-            </Box>
+            <Flex>
+                <Box mr="4">{data.me.username}</Box>
+                <Button variant="link">logout</Button>
+            </Flex>
         );
     }
 return (

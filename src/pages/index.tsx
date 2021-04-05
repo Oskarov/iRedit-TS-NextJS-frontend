@@ -16,5 +16,5 @@ const Index = () => {
 
 export default withUrqlClient(
     CreateUrqlClient,
-    {ssr: false}
+    {ssr: true}
 )(Index);

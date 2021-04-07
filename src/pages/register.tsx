@@ -18,7 +18,7 @@ const Register: React.FC<registerProps> = ({}) => {
     const router = useRouter();
     return (<Wrapper variant="small">
         <Formik
-            initialValues={{username: "", password: ""}}
+            initialValues={{username: "", email: "", password: ""}}
             onSubmit={async (values,{setErrors}) => {
                 const response = await register(values);
                 if (response.data?.register.errors) {
@@ -31,6 +31,7 @@ const Register: React.FC<registerProps> = ({}) => {
             {({values, handleChange, isSubmitting}) => (
                 <Form>
                     <Box><InputField name="username" label="enter unique name" placeholder="username"/></Box>
+                    <Box mt={4}><InputField name="email" label="enter unique email" placeholder="email"/></Box>
                     <Box mt={4}><InputField name="password" label="enter password" placeholder="password" type="password"/></Box>
                     <Box mt={4}><Button isLoading={isSubmitting} type="submit">register</Button></Box>
                 </Form>

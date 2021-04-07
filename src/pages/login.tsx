@@ -15,7 +15,7 @@ const Login: React.FC<{}> = ({}) => {
     const router = useRouter();
     return (<Wrapper variant="small">
         <Formik
-            initialValues={{username: "", password: ""}}
+            initialValues={{usernameOrEmail: "", password: ""}}
             onSubmit={async (values,{setErrors}) => {
                 const response = await login(values);
                 if (response.data?.login.errors) {
@@ -27,7 +27,7 @@ const Login: React.FC<{}> = ({}) => {
         >
             {({values, handleChange, isSubmitting}) => (
                 <Form>
-                    <Box><InputField name="username" label="enter unique name" placeholder="username"/></Box>
+                    <Box><InputField name="usernameOrEmail" label="enter unique name" placeholder="username or email"/></Box>
                     <Box mt={4}><InputField name="password" label="enter password" placeholder="password" type="password"/></Box>
                     <Box mt={4}><Button isLoading={isSubmitting} type="submit">login</Button></Box>
                 </Form>

@@ -12,14 +12,15 @@ import NextLink from "next/link";
 
 
 const ForgotPassword: React.FC<{}> = ({}) => {
-    const [complete, setComplete] = useState(false);
+    const [complete, setComplete] = useState({
+
+    });
     const [, forgotPassword] = useForgotPasswordMutation();
     return (<Wrapper variant="small">
         <Formik
             initialValues={{email: ""}}
             onSubmit={async (values) => {
                 await forgotPassword(values);
-                setComplete(true);
             }}
         >
             {({values, handleChange, isSubmitting}) => (

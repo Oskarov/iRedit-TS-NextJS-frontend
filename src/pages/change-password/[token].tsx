@@ -51,7 +51,7 @@ const ChangePassword: NextPage<{token: string}> = ({token}) => {
                 </Form>
             )}
         </Formik>
-    </Wrapper>);;
+    </Wrapper>);
 }
 
 ChangePassword.getInitialProps = ({query}) =>{

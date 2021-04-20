@@ -1,5 +1,4 @@
 import React from 'react';
-import Wrapper from "../components/wrapper";
 import {Form, Formik} from "formik";
 import {Box, Button, Link} from "@chakra-ui/react";
 import InputField from "../components/inputField";
@@ -8,7 +7,7 @@ import {useCreatePostMutation} from "../generated/graphql";
 import {withUrqlClient} from "next-urql";
 import {CreateUrqlClient} from "../util/createUrqlClient";
 import Layout from "../components/Layout";
-import {toErrorMap} from "../util/toErrorMap";
+import {useIsAuth} from "../util/useIsAuth";
 
 interface CreatePostProps {
 
@@ -17,6 +16,7 @@ interface CreatePostProps {
 const CreatePost: React.FC<CreatePostProps> = ({}) => {
     const router = useRouter();
     const [, createPost] = useCreatePostMutation();
+    useIsAuth();
     return (<Layout variant="small">
         <Formik
             initialValues={{title: "", text: ""}}

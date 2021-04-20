@@ -12,17 +12,23 @@ import NextLink from "next/link";
 
 
 const Login: React.FC<{}> = ({}) => {
-    const [,login] = useLoginMutation()
+    const [, login] = useLoginMutation()
     const router = useRouter();
     return (<Wrapper variant="small">
         <Formik
             initialValues={{usernameOrEmail: "", password: ""}}
-            onSubmit={async (values,{setErrors}) => {
+            onSubmit={async (values, {setErrors}) => {
                 const response = await login(values);
                 if (response.data?.login.errors) {
                     setErrors(toErrorMap(response.data.login.errors));
-                } else if (response.data?.login.user){
-                    await router.push('/');
+                } else if (response.data?.login.user) {
+                    console.log(router);
+                    if (typeof router.query.next === 'string') {
+                        await router.push(router.query.next);
+                    } else {
+                        await router.push("/");
+                    }
+
                 }
             }}
         >

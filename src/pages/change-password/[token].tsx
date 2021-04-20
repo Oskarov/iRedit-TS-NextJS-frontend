@@ -11,8 +11,9 @@ import {withUrqlClient} from "next-urql";
 import {CreateUrqlClient} from "../../util/createUrqlClient";
 import NextLink from "next/link";
 
-const ChangePassword: NextPage<{token: string}> = ({token}) => {
+const ChangePassword: NextPage<{}> = () => {
     const router = useRouter();
+    const token = typeof router.query.token === 'string' ? router.query.token : '';
     const [,changePassword] = useChangePasswordMutation();
     const [fatalError, setFatalError] = useState('');
     return (<Wrapper variant="small">

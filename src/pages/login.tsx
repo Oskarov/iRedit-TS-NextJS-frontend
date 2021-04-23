@@ -12,7 +12,7 @@ import NextLink from "next/link";
 
 
 const Login: React.FC<{}> = ({}) => {
-    const [, login] = useLoginMutation()
+    const [, login] = useLoginMutation();
     const router = useRouter();
     return (<Wrapper variant="small">
         <Formik

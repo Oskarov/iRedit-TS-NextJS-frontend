@@ -6,18 +6,39 @@ import {usePostsQuery} from "../generated/graphql";
 import Layout from "../components/Layout";
 import {Link} from "@chakra-ui/react";
 import NextLink from "next/link";
+import {Box, Heading, Text, Button} from "@chakra-ui/react";
+import {useState} from "react";
 
 const Index = () => {
-    const [{data}] = usePostsQuery();
+    const [variables, setVariables] = useState({limit: 10, cursor: null as null | string});
+    const [{data}] = usePostsQuery({
+        variables: {
+            limit: variables.limit,
+            cursor: variables.cursor
+        }
+    });
 
     return <Layout>
-        <Link>
+        <Link mb={10}>
             <NextLink href="/create-post">
                 create post
             </NextLink>
         </Link>
-        <div>hello world</div>
-        {!data ? <div>loading</div> : data.posts.map((p: any) => (<div>{p.title}</div>))}
+        {!data ? <div>loading</div> : <> {data.posts.map((p: any) => {
+            return <Box p={5} mb={5} shadow="md" borderWidth="1px" key={p.id}>
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text mt={4}>{p.textSnippet}</Text>
+            </Box>
+        })}
+            <Button onClick={() => {
+                setVariables({
+                    limit: variables.limit,
+                    cursor: data!.posts[data!.posts.length -1].createdAt,
+                });
+                console.log(variables);
+            }} m="auto" mb={2}>Load more</Button>
+        </>
+        }
     </Layout>
 }
 

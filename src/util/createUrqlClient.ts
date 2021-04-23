@@ -1,5 +1,5 @@
-import { dedupExchange, fetchExchange} from '@urql/core';
-import {cacheExchange, QueryInput, Cache} from '@urql/exchange-graphcache';
+import {dedupExchange, fetchExchange, stringifyVariables} from '@urql/core';
+import {cacheExchange, QueryInput, Cache, Resolver} from '@urql/exchange-graphcache';
 import {LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation} from "../generated/graphql";
 import {betterUpdateQuery} from "./betterUpdateQuery";
 import { pipe, tap } from 'wonka';
@@ -19,6 +19,37 @@ const errorExchange: Exchange = ({ forward }) => ops$ => {
     );
 };
 
+const cursorPagination = (): Resolver => {
+    return (_parent, fieldArgs, cache, info) => {
+        console.log('1234567');
+        const { parentKey: entityKey, fieldName } = info;
+        const allFields = cache.inspectFields(entityKey);
+        const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
+        const size = fieldInfos.length;
+
+        if (size === 0) {
+            return undefined;
+        }
+
+        console.log("----------------");
+        console.log(fieldInfos);
+        const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
+        const isItInTheCache = cache.resolveFieldByKey(entityKey, fieldKey);
+
+        info.partial = !isItInTheCache;
+
+        const results: string[] = [];
+        fieldInfos.forEach((fi) => {
+           const data = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string[];
+           results.push(...data)
+        });
+
+        console.log(results)
+
+        return results;
+    };
+};
+
 export const CreateUrqlClient = (ssrExchange: any) => ({
 
     url: 'http://localhost:4321/graphql',
@@ -26,6 +57,11 @@ export const CreateUrqlClient = (ssrExchange: any) => ({
         credentials: "include" as const
     },
     exchanges: [dedupExchange, cacheExchange({
+        resolvers: {
+          Query: {
+              posts: cursorPagination()
+          }
+        },
         updates: {
             Mutation: {
                 logout: (_result, args, cache, info) => {

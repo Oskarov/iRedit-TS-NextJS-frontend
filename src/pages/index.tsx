@@ -24,7 +24,7 @@ const Index = () => {
                 create post
             </NextLink>
         </Link>
-        {!data ? <div>loading</div> : <> {data.posts.map((p: any) => {
+        {!data!.posts ? <div>loading</div> : <> {data!.posts.posts.map((p: any) => {
             return <Box p={5} mb={5} shadow="md" borderWidth="1px" key={p.id}>
                 <Heading fontSize="xl">{p.title}</Heading>
                 <Text mt={4}>{p.textSnippet}</Text>
@@ -33,7 +33,7 @@ const Index = () => {
             <Button onClick={() => {
                 setVariables({
                     limit: variables.limit,
-                    cursor: data!.posts[data!.posts.length -1].createdAt,
+                    cursor: data!.posts.posts[data!.posts.posts.length -1].createdAt,
                 });
                 console.log(variables);
             }} m="auto" mb={2}>Load more</Button>
